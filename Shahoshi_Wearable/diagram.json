@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "author": "Pritam Banik",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-mpu6050",
+      "id": "mpu",
+      "top": -260,
+      "left": -260,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "buzzer1",
+      "top": -260,
+      "left": 60,
+      "attrs": { "volume": "0.2" }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot_sound",
+      "top": 0,
+      "left": -300,
+      "attrs": { "label": "SOUND (LM393 stand-in)" }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot_hr",
+      "top": 0,
+      "left": 260,
+      "attrs": { "label": "HEART RATE (MAX30100 stand-in)" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "mpu:VCC", "esp:3V3", "red", [] ],
+    [ "mpu:GND", "esp:GND.1", "black", [] ],
+    [ "mpu:SDA", "esp:21", "blue", [] ],
+    [ "mpu:SCL", "esp:22", "green", [] ],
+
+    [ "buzzer1:1", "esp:GND.2", "black", [] ],
+    [ "buzzer1:2", "esp:25", "yellow", [] ],
+
+    [ "pot_sound:VCC", "esp:3V3", "red", [] ],
+    [ "pot_sound:GND", "esp:GND.2", "black", [] ],
+    [ "pot_sound:SIG", "esp:34", "orange", [] ],
+
+    [ "pot_hr:VCC", "esp:3V3", "red", [] ],
+    [ "pot_hr:GND", "esp:GND.2", "black", [] ],
+    [ "pot_hr:SIG", "esp:35", "purple", [] ]
+  ],
+  "dependencies": {}
+}
