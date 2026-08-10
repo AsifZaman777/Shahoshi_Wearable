@@ -28,6 +28,9 @@ void setup() {
   // ---- Initialize Logger (LittleFS) ----
   initLogger();
 
+  // Print all logs preserved in LittleFS on boot
+  printAllLogsToSerial();
+
   logMessage("\n================================");
   logMessage("SHAHOSHI WEARABLE - MODULAR V2");
   logMessage("================================");

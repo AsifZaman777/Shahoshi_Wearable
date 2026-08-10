@@ -7,6 +7,7 @@
 
 bool initLogger();
 void logMessage(const String& message);
+void printAllLogsToSerial();
 String getCurrentDateStr();
 String getCurrentTimestampStr();
 

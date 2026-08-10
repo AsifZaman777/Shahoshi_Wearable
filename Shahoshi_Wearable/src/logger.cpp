@@ -52,3 +52,37 @@ void logMessage(const String& message) {
     file.close();
   }
 }
+
+void printAllLogsToSerial() {
+  if (!littleFsReady) {
+    Serial.println("[LOGGER] LittleFS not mounted.");
+    return;
+  }
+
+  if (!LittleFS.exists("/logs")) {
+    Serial.println("[LOGGER] No /logs directory found.");
+    return;
+  }
+
+  File root = LittleFS.open("/logs");
+  if (!root || !root.isDirectory()) {
+    Serial.println("[LOGGER] Failed to open /logs directory.");
+    return;
+  }
+
+  Serial.println("\n========== PRESERVED LITTLEFS LOG FILES ==========");
+  File file = root.openNextFile();
+  bool foundAny = false;
+  while (file) {
+    foundAny = true;
+    Serial.printf("\n--- Log File: %s (%d bytes) ---\n", file.name(), file.size());
+    while (file.available()) {
+      Serial.write(file.read());
+    }
+    file = root.openNextFile();
+  }
+  if (!foundAny) {
+    Serial.println("No log files present yet.");
+  }
+  Serial.println("\n==================================================\n");
+}
