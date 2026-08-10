@@ -3,7 +3,12 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+.env
 config.h
 include/config.h
 src/config.h
+logs/
+*.log
+
+
 
