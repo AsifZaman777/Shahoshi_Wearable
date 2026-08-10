@@ -25,13 +25,10 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
 
-  // ---- Initialize Logger (LittleFS) ----
+  // ---- Initialize Logger ----
   initLogger();
 
-  // Print all logs preserved in LittleFS on boot
-  printAllLogsToSerial();
-
-  logMessage("\n================================");
+  logMessage("================================");
   logMessage("SHAHOSHI WEARABLE - MODULAR V2");
   logMessage("================================");
 
@@ -66,7 +63,7 @@ void setup() {
   delay(100);
   beep(3000, 200);
 
-  logMessage("SYSTEM READY - Diagnostics active.\n");
+  logMessage("SYSTEM READY - Diagnostics active.");
 }
 
 void loop() {
@@ -80,26 +77,27 @@ void loop() {
 }
 
 void printDiagnostics() {
-  Serial.println("--------------------------------------------------");
+  logMessage("--------------------------------------------------");
 
   sensors_event_t accel, gyro, temp;
   mpu.getEvent(&accel, &gyro, &temp);
 
-  Serial.printf("MPU6050  | Accel X: %.2f  Y: %.2f  Z: %.2f  Temp: %.2f C\n",
-                accel.acceleration.x, accel.acceleration.y, accel.acceleration.z, temp.temperature);
+  char mpuBuf[128];
+  snprintf(mpuBuf, sizeof(mpuBuf), "MPU6050  | Accel X: %.2f  Y: %.2f  Z: %.2f  Temp: %.2f C",
+           accel.acceleration.x, accel.acceleration.y, accel.acceleration.z, temp.temperature);
+  logMessage(String(mpuBuf));
 
   int soundRaw = analogRead(SOUND_PIN);
-  Serial.printf("SOUND    | Raw: %d\n", soundRaw);
+  logMessage("SOUND    | Raw: " + String(soundRaw));
 
   int hrRaw = analogRead(HR_PIN);
   float bpm = map(hrRaw, 0, 4095, 40, 180);
-  Serial.printf("HEART RT | BPM: %.0f\n", bpm);
+  logMessage("HEART RT | BPM: " + String(bpm, 0));
 
-  Serial.print("GPS      | ");
-  Serial.println(getGPSLocationStr());
+  logMessage("GPS      | " + getGPSLocationStr());
 
   // Evaluate Emergency Heuristics & Log/Alert
   evaluateHeuristics(accel, soundRaw, bpm);
 
-  Serial.println("--------------------------------------------------");
+  logMessage("--------------------------------------------------");
 }
