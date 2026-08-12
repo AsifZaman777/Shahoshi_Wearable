@@ -32,7 +32,55 @@ The hardware components have been optimized for a compact wearable footprint and
 | **Misc & Enclosure** | PCB, Jumper Wires, 3D Wearable Case | Custom Wrist/Pendant | ৳125 - ৳180 | Compact wristband/pendant housing |
 | **TOTAL SYSTEM COST** | **Complete Wearable Unit** | **Ultra-Compact Footprint** | **৳1,700 - ৳1,950** | **Extremely small footprint using XIAO ESP32S3 + ATGM336H** |
 
-> 📌 **Hardware Wiring Diagram**: Complete pinout connection tables for both **Seeed Studio XIAO ESP32S3** and **ESP32 DevKit V1** are available in [WIRING.txt](file:///f:/Shahoshi_Wearable/Shahoshi_Wearable/WIRING.txt).
+> 📌 **Hardware Architecture & Simulation Notice**:
+> - **Wokwi Virtual Simulator (`esp32dev`)**: Uses standard **ESP32 DevKit V1** (`board-esp32-devkit-c-v4`) for web-based simulation to guarantee 100% crash-free FreeRTOS/ISR execution in Wokwi.
+> - **Physical Wearable Target (`seeed_xiao_esp32s3`)**: Uses the thumb-sized **Seeed Studio XIAO ESP32S3** for real-world compact wearable deployment.
+
+---
+
+## 🔌 Hardware Pin Mapping & Circuit Diagrams
+
+### 1. Seeed Studio XIAO ESP32S3 (Real Physical Hardware Target)
+
+```
+                       +-------------------------------+
+                       |  Seeed Studio XIAO ESP32S3    |
+                       |      (Thumb-Sized MCU)        |
+  LM393 Sound Sensor <---| D1 (GPIO 2)            3V3/5V |---> VCC (All Modules)
+ MAX30100 Heart Rate <---| D2 (GPIO 3)             GND |---> GND (Common Ground)
+  Piezo Siren Alarm <---| D3 (GPIO 4)     D7 (GPIO 44) |<--- ATGM336H GPS TX (Serial1 RX)
+    MPU6050 SDA (I2C) <---| D4 (GPIO 5)     D6 (GPIO 43) |---> ATGM336H GPS RX (Serial1 TX)
+    MPU6050 SCL (I2C) <---| D5 (GPIO 6)                 |
+                       +-------------------------------+
+```
+
+### 2. ESP32 DevKit V1 (Wokwi Virtual Simulator Target)
+
+```
+                       +-------------------------------+
+                       |       ESP32 DevKit V1         |
+                       |    (Wokwi Simulator Board)    |
+    MPU6050 SDA (I2C) <---| GPIO 21                3V3 |---> VCC (All Modules)
+    MPU6050 SCL (I2C) <---| GPIO 22                GND |---> GND (Common Ground)
+  Piezo Siren Alarm <---| GPIO 25            GPIO 16 |<--- GPS TX (Serial2 RX2)
+  LM393 Sound Sensor <---| GPIO 34            GPIO 17 |---> GPS RX (Serial2 TX2)
+ MAX30100 Heart Rate <---| GPIO 35                            |
+                       +-------------------------------+
+```
+
+### Pin Comparison Table
+
+| Sensor / Subsystem | Function | Seeed Studio XIAO ESP32S3 (Hardware) | ESP32 DevKit V1 (Wokwi Simulator) |
+| :--- | :--- | :--- | :--- |
+| **MPU6050 IMU** | I2C Data (SDA) | **D4 (GPIO 5)** | **GPIO 21** |
+| **MPU6050 IMU** | I2C Clock (SCL) | **D5 (GPIO 6)** | **GPIO 22** |
+| **LM393 Sound Sensor** | Analog Input (Screaming/Distress) | **D1 (GPIO 2)** | **GPIO 34** |
+| **MAX30100 Heart Rate**| Analog Input (Pulse Stand-in) | **D2 (GPIO 3)** | **GPIO 35** |
+| **Piezo Siren Buzzer** | Digital Output (Dual-Tone Alarm) | **D3 (GPIO 4)** | **GPIO 25** |
+| **ATGM336H / GPS** | UART Receive (MCU RX) | **D7 (GPIO 44 / Serial1)** | **GPIO 16 (RX2 / Serial2)** |
+| **ATGM336H / GPS** | UART Transmit (MCU TX) | **D6 (GPIO 43 / Serial1)** | **GPIO 17 (TX2 / Serial2)** |
+
+> 📌 Full step-by-step wiring instructions are also preserved in [WIRING.txt](file:///f:/Shahoshi_Wearable/Shahoshi_Wearable/WIRING.txt).
 
 ---
 
