@@ -1,6 +1,11 @@
 #include "buzzer.h"
 
-#define BUZZER_PIN 25
+// Buzzer pin: D3 (GPIO 4) on XIAO ESP32S3, GPIO 25 on ESP32 DevKit
+#ifdef ARDUINO_SEEED_XIAO_ESP32S3
+  #define BUZZER_PIN 4
+#else
+  #define BUZZER_PIN 25
+#endif
 
 void initBuzzer() {
   pinMode(BUZZER_PIN, OUTPUT);

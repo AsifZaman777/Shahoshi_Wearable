@@ -9,10 +9,19 @@
 #include "gps_handler.h"
 #include "heuristics.h"
 
-#define SDA_PIN      21
-#define SCL_PIN      22
-#define SOUND_PIN    34
-#define HR_PIN       35
+// ---- XIAO ESP32S3 Pin Mapping (Configuration A from WIRING.txt) ----
+#ifdef ARDUINO_SEEED_XIAO_ESP32S3
+  #define SDA_PIN      5    // D4 (GPIO 5) - I2C SDA
+  #define SCL_PIN      6    // D5 (GPIO 6) - I2C SCL
+  #define SOUND_PIN    2    // D1 (GPIO 2 / ADC1) - LM393 Sound Sensor
+  #define HR_PIN       3    // D2 (GPIO 3 / ADC1) - MAX30100 Analog Output
+#else
+  // ---- ESP32 DevKit V1 Pin Mapping (Configuration B from WIRING.txt) ----
+  #define SDA_PIN      21   // Default I2C SDA
+  #define SCL_PIN      22   // Default I2C SCL
+  #define SOUND_PIN    34   // ADC1_CH6
+  #define HR_PIN       35   // ADC1_CH7
+#endif
 
 Adafruit_MPU6050 mpu;
 

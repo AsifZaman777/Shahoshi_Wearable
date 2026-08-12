@@ -1,8 +1,16 @@
 #include "gps_handler.h"
 
 // GPS Module Config (Supports ATGM336H 13x16mm ultra-compact module & NEO-6M, 9600 Baud UART)
-#define GPS_RX_PIN   16
-#define GPS_TX_PIN   17
+// GPS UART pins: D7/D6 (GPIO 44/43) on XIAO ESP32S3, GPIO 16/17 on ESP32 DevKit
+#ifdef ARDUINO_SEEED_XIAO_ESP32S3
+  #define GPS_RX_PIN   44   // D7 (GPIO 44 / RX) - GPS TXD -> MCU RX
+  #define GPS_TX_PIN   43   // D6 (GPIO 43 / TX) - GPS RXD <- MCU TX
+  #define GPSSerial    Serial1
+#else
+  #define GPS_RX_PIN   16   // UART2 RX
+  #define GPS_TX_PIN   17   // UART2 TX
+  #define GPSSerial    Serial2
+#endif
 #define GPS_BAUD     9600
 #define GPS_SIMULATION 1
 
@@ -22,8 +30,8 @@ void initGPS() {
 #if GPS_SIMULATION
   Serial.println("Initializing GPS (SIMULATION mode)...");
 #else
-  Serial.println("Initializing GPS Hardware (UART2)...");
-  Serial2.begin(GPS_BAUD, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
+  Serial.println("Initializing GPS Hardware...");
+  GPSSerial.begin(GPS_BAUD, SERIAL_8N1, GPS_RX_PIN, GPS_TX_PIN);
 #endif
 }
 
@@ -39,8 +47,8 @@ void feedGPS() {
     sentenceIndex = (sentenceIndex + 1) % SAMPLE_NMEA_COUNT;
   }
 #else
-  while (Serial2.available() > 0) {
-    gps.encode(Serial2.read());
+  while (GPSSerial.available() > 0) {
+    gps.encode(GPSSerial.read());
   }
 #endif
 }

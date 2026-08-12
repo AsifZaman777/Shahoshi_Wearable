@@ -1,0 +1,97 @@
+===============================================================================
+               SHAHOSHI WEARABLE EMERGENCY RESPONSE SYSTEM
+                    HARDWARE WIRING & PINOUT GUIDE
+===============================================================================
+
+-------------------------------------------------------------------------------
+1. CONFIGURATION A: SEEED STUDIO XIAO ESP32S3 + ATGM336H (RECOMMENDED WEARABLE)
+-------------------------------------------------------------------------------
+
+Board Pinout Reference (Seeed Studio XIAO ESP32S3 Top View):
+  +---------------------------------------------------+
+  | [USB-C Port]                                      |
+  |  (D0)  GPIO 1  [1]                   [14] 5V / VBUS |
+  |  (D1)  GPIO 2  [2]                   [13] GND       |
+  |  (D2)  GPIO 3  [3]                   [12] 3V3       |
+  |  (D3)  GPIO 4  [4]                   [11] D10 GPIO9 |
+  |  (D4)  GPIO 5  [5] (SDA)             [10] D9  GPIO8 |
+  |  (D5)  GPIO 6  [6] (SCL)             [9]  D8  GPIO7 |
+  |  (D6)  GPIO 43 [7] (TX)              [8]  D7  GPIO44 (RX) |
+  +---------------------------------------------------+
+
+Pin Connections Table (XIAO ESP32S3):
+
+  [Component]        [Component Pin]   -->   [XIAO ESP32S3 Pin]    [Notes / Wire Color]
+  --------------------------------------------------------------------------------------
+  1. ATGM336H GPS    VCC               -->   3V3 (or 5V)           Red (3.3V / 5V power)
+                     GND               -->   GND                   Black (Ground)
+                     TXD               -->   D7 (GPIO 44 / RX)     Blue (GPS TX -> MCU RX)
+                     RXD               -->   D6 (GPIO 43 / TX)     Green (GPS RX <- MCU TX)
+
+  2. MPU6050 IMU     VCC               -->   3V3                   Red (3.3V Power)
+                     GND               -->   GND                   Black (Ground)
+                     SDA               -->   D4 (GPIO 5)           Yellow (I2C SDA Data)
+                     SCL               -->   D5 (GPIO 6)           White (I2C SCL Clock)
+
+  3. MAX30100 PPG    VIN / VCC         -->   3V3                   Red (3.3V Power)
+                     GND               -->   GND                   Black (Ground)
+                     SDA               -->   D4 (GPIO 5)           Yellow (Shared I2C SDA)
+                     SCL               -->   D5 (GPIO 6)           White (Shared I2C SCL)
+                     *Analog Output*   -->   D2 (GPIO 3 / ADC1)    Purple (Stand-in Mode)
+
+  4. LM393 Sound     VCC               -->   3V3                   Red (3.3V Power)
+                     GND               -->   GND                   Black (Ground)
+                     AO (Analog Out)   -->   D1 (GPIO 2 / ADC1)    Orange (Distress Sound)
+
+  5. Active Siren    Pos (+)           -->   D3 (GPIO 4)           Yellow (Alarm Signal)
+     Buzzer          Neg (-)           -->   GND                   Black (Ground)
+
+  6. Li-Po Battery   BAT+              -->   BAT+ Pad (Bottom)     Red (Direct Battery +)
+     (3.7V 800mAh)   BAT-              -->   BAT- Pad (Bottom)     Black (Direct Battery -)
+
+-------------------------------------------------------------------------------
+2. CONFIGURATION B: ESP32 DEVKIT V1 + ATGM336H (STANDARD PROTOTYPING BREADBOARD)
+-------------------------------------------------------------------------------
+
+Pin Connections Table (ESP32 DevKit V1):
+
+  [Component]        [Component Pin]   -->   [ESP32 DevKit V1 Pin] [Notes / Wire Color]
+  --------------------------------------------------------------------------------------
+  1. ATGM336H GPS    VCC               -->   3V3                   Red
+                     GND               -->   GND                   Black
+                     TXD               -->   GPIO 16 (RX2)         Blue (GPS TX -> MCU RX)
+                     RXD               -->   GPIO 17 (TX2)         Green (GPS RX <- MCU TX)
+
+  2. MPU6050 IMU     VCC               -->   3V3                   Red
+                     GND               -->   GND                   Black
+                     SDA               -->   GPIO 21 (SDA)         Yellow
+                     SCL               -->   GPIO 22 (SCL)         White
+
+  3. MAX30100 PPG    VIN / VCC         -->   3V3                   Red
+                     GND               -->   GND                   Black
+                     SDA               -->   GPIO 21 (SDA)         Yellow
+                     SCL               -->   GPIO 22 (SCL)         White
+                     *Analog Output*   -->   GPIO 35 (ADC1_CH7)    Purple (Stand-in Mode)
+
+  4. LM393 Sound     VCC               -->   3V3                   Red
+                     GND               -->   GND                   Black
+                     AO (Analog Out)   -->   GPIO 34 (ADC1_CH6)    Orange
+
+  5. Active Siren    Pos (+)           -->   GPIO 25 (DAC1)        Yellow
+     Buzzer          Neg (-)           -->   GND                   Black
+
+  6. Power System    TP4056 OUT+       -->   5V / VIN              Red
+                     TP4056 OUT-       -->   GND                   Black
+
+-------------------------------------------------------------------------------
+3. POWER & WIRING HARDWARE NOTES
+-------------------------------------------------------------------------------
+  * Operating Voltage: All sensors (MPU6050, MAX30100, LM393, ATGM336H) run 
+    safely on 3.3V logic provided by the ESP32 / XIAO regulator.
+  * Shared I2C Bus: MPU6050 and MAX30100 share SDA and SCL lines. MPU6050 
+    I2C address is 0x68 and MAX30100 address is 0x57.
+  * GPS UART Cross-Wiring: Always connect GPS TXD to MCU RX, and GPS RXD to MCU TX.
+  * XIAO Battery Connection: Seeed XIAO ESP32S3 features an onboard Li-Po charger. 
+    Solder a 3.7V Li-Po battery directly to the BAT+ and BAT- solder pads on the 
+    underside of the board for ultra-compact battery power without extra charging boards.
+===============================================================================
