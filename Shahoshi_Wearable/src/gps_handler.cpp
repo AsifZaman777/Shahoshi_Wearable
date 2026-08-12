@@ -1,5 +1,6 @@
 #include "gps_handler.h"
 
+// GPS Module Config (Supports ATGM336H 13x16mm ultra-compact module & NEO-6M, 9600 Baud UART)
 #define GPS_RX_PIN   16
 #define GPS_TX_PIN   17
 #define GPS_BAUD     9600

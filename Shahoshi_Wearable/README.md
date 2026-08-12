@@ -15,6 +15,24 @@ A smart IoT wearable emergency detection system built on ESP32 microcontrollers.
 
 ---
 
+## 📦 Bill of Materials (BOM) & Estimated Cost
+
+The hardware components have been optimized for a compact wearable footprint and lower total assembly cost:
+
+| Component | Model / Specs | Form Factor / Size | Unit Cost (BDT ৳) | Notes & Advantages |
+| :--- | :--- | :--- | :--- | :--- |
+| **Microcontroller** | ESP32 DevKit V1 (ESP-WROOM-32) | 28.5 × 51.8 mm | ৳420 - ৳480 | Wi-Fi + BLE, Dual-Core 240MHz, 4MB Flash |
+| **GPS Module** | **ATGM336H** (BDS/GPS Dual-Mode) | **13 × 16 mm** *(Ultra-Compact)* | **৳400 - ৳600** | **Upgraded from NEO-6M (22×30mm)**; 9600 Baud UART, NMEA output |
+| **IMU / Accelerometer** | MPU6050 6-Axis Motion Sensor | 15 × 20 mm | ৳140 - ৳180 | I2C interface, impact & free-fall detection |
+| **Sound / Acoustic Sensor** | LM393 High-Sensitivity Microphone | 15 × 32 mm | ৳60 - ৳90 | Analog audio sensing for screaming detection |
+| **Heart Rate / SpO2 Sensor** | MAX30100 PPG Optical Sensor | 14 × 19 mm | ৳250 - ৳320 | I2C pulse rate & cardiac arrhythmia tracker |
+| **Audio Alert Siren** | Active Piezo Buzzer (5V / 3.3V) | 12 mm Diameter | ৳25 - ৳40 | Dual-tone local emergency alarm output |
+| **Power Management** | TP4056 USB Charger + 3.7V Li-Po (800mAh) | Compact Wearable Cell | ৳280 - ৳360 | Portable power module with micro-USB/Type-C |
+| **Misc & Enclosure** | PCB, Jumper Wires, 3D Wearable Case | Custom Wrist/Pendant | ৳125 - ৳180 | Compact wristband/pendant housing |
+| **TOTAL SYSTEM COST** | **Complete Wearable Unit** | **Ultra-Compact Footprint** | **৳1,700 - ৳1,950** | **Total cost reduced from ~৳2,500 with ATGM336H** |
+
+---
+
 ## 🚀 How to Build and Run
 
 ### 1. Prerequisites
@@ -74,7 +92,7 @@ _(Note: `.env` and `include/config.h` are protected by `.gitignore` to prevent s
 
 1. Connect your ESP32 board via USB.
 2. Update `WIFI_SSID` and `WIFI_PASS` in `.env` to your 2.4GHz Wi-Fi credentials.
-3. If using real NEO-6M GPS module, set `#define GPS_SIMULATION 0` in `src/gps_handler.cpp`.
+3. If using real ATGM336H (or NEO-6M) GPS module, set `#define GPS_SIMULATION 0` in `src/gps_handler.cpp`.
 4. Upload firmware:
    ```powershell
    & "C:\Users\asif.zaman\.platformio\penv\Scripts\platformio.exe" run --target upload
